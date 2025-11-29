@@ -1,21 +1,15 @@
-﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TravailSession.Class
 {
-    internal class Client
+    internal class Clients
     {
-        public static List<Client> ClientsList = new List<Client>();
+        public static List<Clients> ClientsList = new List<Clients>();
 
         private int identifiant;
         private string nom, adresse, numeroTelephone, email;
 
-        public Client(int identifiant, string nom, string adresse, string numeroTelephone, string email)
+        public Clients(int identifiant, string nom, string adresse, string numeroTelephone, string email)
         {
             this.identifiant = identifiant;
             this.nom = nom;

@@ -1,9 +1,5 @@
-﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TravailSession.Class
 {
@@ -45,7 +41,7 @@ namespace TravailSession.Class
 
         public string GetClientName()
         {
-            var client = Client.ClientsList.FirstOrDefault(c => c.Identifiant == identifant);
+            var client = Clients.ClientsList.FirstOrDefault(c => c.Identifiant == identifant);
 
             return client != null ? client.Nom : "Inconnu";
         }

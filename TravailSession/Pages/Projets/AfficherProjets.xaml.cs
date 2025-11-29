@@ -26,6 +26,8 @@ namespace TravailSession.Pages.Projets
         public AfficherProjets()
         {
             InitializeComponent();
+            Singleton.Singleton.getInstance().chargerDonnes();
+            lvListeProjects.ItemsSource = Singleton.Singleton.getInstance().ListeP;
         }
     }
 }
