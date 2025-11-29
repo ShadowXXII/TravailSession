@@ -14,6 +14,43 @@
     </Window.SystemBackdrop>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <MenuBar>
+            <MenuBarItem Title="Fichier" >
+                <MenuFlyoutItem Text="Exporter" Tag="exporter" Click="gestion_clic_item_menu"/>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Quitter" Tag="quitter" Click="gestion_clic_item_menu"/>
+            </MenuBarItem>
+        </MenuBar>
+
+
+        <NavigationView Grid.Row="1" 
+                        PaneDisplayMode="Left" 
+                        PaneTitle="Pages" 
+                        x:Name="navView" 
+                        ItemInvoked="navView_ItemInvoked">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItemHeader Content="Projets"/>
+                <NavigationViewItem Content="Liste des projets" x:Name="iProjets" Icon="ViewAll" Tag="projets"/>
+                <NavigationViewItem Content="Ajouter un projet" x:Name="iAjouterProjet" Icon="Add" Tag="ajouterProjet"/>
+                <NavigationViewItemSeparator />
+                <NavigationViewItemHeader Content="Clients"/>
+                <NavigationViewItem Content="Liste des clients" x:Name="iClients" Icon="People" Tag="clients"/>
+                <NavigationViewItem Content="Ajouter un client" x:Name="iAjouterClient" Icon="Add" Tag="ajouterClient"/>
+                <NavigationViewItemHeader Content="Employes"/>
+                <NavigationViewItem Content="Liste des employes" x:Name="iEmployes" Icon="People" Tag="employes"/>
+                <NavigationViewItem Content="Ajouter employes" x:Name="iAjouterEmploye" Icon="Add" Tag="ajouterEmploye"/>
+            </NavigationView.MenuItems>
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Déconnexion" x:Name="iDeconnexion" Icon="Switch" Tag="deconnexion" />
+            </NavigationView.FooterMenuItems>
+            <Frame x:Name="mainFrame" />
+        </NavigationView>
 
     </Grid>
 </Window>
