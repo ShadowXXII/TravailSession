@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TravailSession.Class
 {
-    internal class employes
+    internal class Employe
     {
-        string matricule, nom, prenom, email, photoIdentite, statut;
-        DateTime datenaissance, dateEmbauce;
-        int tauxHoraire;
+        private string matricule, nom, prenom, email, photoIdentite, statut;
+        private DateTime dateNaissance, dateEmbauche;
+        private double tauxHoraire;
 
-        public employes(string matricule, string nom, string prenom, string email, string photoIdentite, string statut, DateTime datenaissance, DateTime dateEmbauce, int tauxHoraire)
+        public Employe(string matricule, string nom, string prenom, string email, string photoIdentite, string statut, DateTime dateNaissance, DateTime dateEmbauche, double tauxHoraire)
         {
             this.matricule = matricule;
             this.nom = nom;
@@ -20,24 +20,24 @@ namespace TravailSession.Class
             this.email = email;
             this.photoIdentite = photoIdentite;
             this.statut = statut;
-            this.datenaissance = datenaissance;
-            this.dateEmbauce = dateEmbauce;
+            this.dateNaissance = dateNaissance;
+            this.dateEmbauche = dateEmbauche;
             this.tauxHoraire = tauxHoraire;
         }
 
-        public string Matricule { get => matricule; set => matricule = value; }
+        public string Matricule { get => matricule; }
         public string Nom { get => nom; set => nom = value; }
         public string Prenom { get => prenom; set => prenom = value; }
         public string Email { get => email; set => email = value; }
         public string PhotoIdentite { get => photoIdentite; set => photoIdentite = value; }
         public string Statut { get => statut; set => statut = value; }
-        public DateTime Datenaissance { get => datenaissance; set => datenaissance = value; }
-        public DateTime DateEmbauce { get => dateEmbauce; set => dateEmbauce = value; }
-        public int TauxHoraire { get => tauxHoraire; set => tauxHoraire = value; }
+        public DateTime DateNaissance { get => dateNaissance; }
+        public DateTime DateEmbauche { get => dateEmbauche; }
+        public double TauxHoraire { get => tauxHoraire; set => tauxHoraire = value; }
 
-        public override string? ToString()
+        public override string ToString()
         {
-            return $"{matricule} - {nom} {prenom} : {email}, Statut: {statut}, Date de naissance: {datenaissance}, Date d'embauce: {dateEmbauce} - {tauxHoraire}$";
+            return $"{matricule} - {nom} {prenom} | {email} | {statut} | {tauxHoraire}$/h";
         }
     }
 }

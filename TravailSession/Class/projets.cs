@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,20 +7,47 @@ using System.Threading.Tasks;
 
 namespace TravailSession.Class
 {
-    internal class projets
+    internal class Projet
     {
-        //    numeroProjet VARCHAR(255),
-        //titre VARCHAR(255),
-        //dateDebut DATE,
-        //description TEXT,
-        //budget DOUBLE,
-        //nombreEmplyesRequis INT,
-        //totalSalaires DOUBLE,
-        //statut ENUM('en cours','termine') NOT NULL DEFAULT 'en cours',
-        //identifant INT UNIQUE,
+        private string numeroProjet, titre, statut, description;
+        private DateTime dateDebut;
+        private double budget, totalSalaires;
+        private int nombreEmployesRequis, identifant;
 
-        string numeroProjet, titre, statut, description;
-        DateTime dateDebut;
-        double budget;
+        public Projet(string numeroProjet, string titre, string statut, string description, DateTime dateDebut, double budget, double totalSalaires, int nombreEmployesRequis, int identifant)
+        {
+            this.numeroProjet = numeroProjet;
+            this.titre = titre;
+            this.statut = statut;
+            this.description = description;
+            this.dateDebut = dateDebut;
+            this.budget = budget;
+            this.totalSalaires = totalSalaires;
+            this.nombreEmployesRequis = nombreEmployesRequis;
+            this.identifant = identifant;
+        }
+
+        public string NumeroProjet { get => numeroProjet; set => numeroProjet = value; }
+        public string Titre { get => titre; set => titre = value; }
+        public string Description { get => description; set => description = value; }
+        public string Statut { get => statut; set => statut = value; }
+        public DateTime DateDebut { get => dateDebut; set => dateDebut = value; }
+        public double Budget { get => budget; set => budget = value; }
+        public double TotalSalaires { get => totalSalaires; set => totalSalaires = value; }
+        public int NombreEmployesRequis { get => nombreEmployesRequis; set => nombreEmployesRequis = value; }
+        public int Identifant { get => identifant; set => identifant = value; }
+
+        public override string ToString()
+        {
+            return $"{numeroProjet} - {titre} | Client : {GetClientName()} | Début : {dateDebut.ToShortDateString()} | Budget : {budget}$";
+        }
+
+
+        public string GetClientName()
+        {
+            var client = Client.ClientsList.FirstOrDefault(c => c.Identifiant == identifant);
+
+            return client != null ? client.Nom : "Inconnu";
+        }
     }
 }
