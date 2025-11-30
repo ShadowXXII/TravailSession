@@ -10,17 +10,26 @@
     mc:Ignorable="d">
 
     <Grid>
-        <GridView x:Name="lvListeProjects">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock x:Name="tblTexte" Text="Liste des Projets" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
+        </StackPanel>
+
+        <GridView x:Name="lvListeProjects" Grid.Row="1" SelectionChanged="lvListeProjects_SelectionChanged">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:Projet">
                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="10" Margin="5">
-                    <StackPanel>
+                        <StackPanel>
                             <TextBlock Text="{x:Bind NumeroProjet}" FontSize="18" FontWeight="Bold"/>
                             <TextBlock Text="{x:Bind Titre}" FontSize="14"/>
-                            <TextBlock Text="{x:Bind Identifant}" FontSize="14" Foreground="DarkBlue"/>
+                            <TextBlock Text="{x:Bind GetClientName()}" FontSize="14"/>
                             <TextBlock Text="{x:Bind DateDebut}" FontSize="14"/>
                             <TextBlock Text="{x:Bind Budget}" FontSize="14"/>
-                    </StackPanel>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </GridView.ItemTemplate>

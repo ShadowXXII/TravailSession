@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Aqua">
-
+    <Grid>
+        <ListView x:Name="lvListeClients"/>
     </Grid>
 </Page>

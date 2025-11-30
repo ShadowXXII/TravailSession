@@ -26,5 +26,7 @@ public sealed partial class AfficherEmployes : Page
     public AfficherEmployes()
     {
         InitializeComponent();
+        Singleton.Singleton.getInstance().chargerDonnes();
+        lvListeEmployes.ItemsSource = Singleton.Singleton.getInstance().ListeE;
     }
 }

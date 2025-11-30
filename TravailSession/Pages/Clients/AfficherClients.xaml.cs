@@ -26,5 +26,7 @@ public sealed partial class AfficherClients : Page
     public AfficherClients()
     {
         InitializeComponent();
+        Singleton.Singleton.getInstance().chargerDonnes();
+        lvListeClients.ItemsSource = Singleton.Singleton.getInstance().ListeC;
     }
 }

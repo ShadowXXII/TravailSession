@@ -42,6 +42,7 @@
                 <NavigationViewItemHeader Content="Clients"/>
                 <NavigationViewItem Content="Liste des clients" x:Name="iClients" Icon="People" Tag="clients"/>
                 <NavigationViewItem Content="Ajouter un client" x:Name="iAjouterClient" Icon="Add" Tag="ajouterClient"/>
+                <NavigationViewItemSeparator />
                 <NavigationViewItemHeader Content="Employes"/>
                 <NavigationViewItem Content="Liste des employes" x:Name="iEmployes" Icon="People" Tag="employes"/>
                 <NavigationViewItem Content="Ajouter employes" x:Name="iAjouterEmploye" Icon="Add" Tag="ajouterEmploye"/>

@@ -29,5 +29,15 @@ namespace TravailSession.Pages.Projets
             Singleton.Singleton.getInstance().chargerDonnes();
             lvListeProjects.ItemsSource = Singleton.Singleton.getInstance().ListeP;
         }
+
+        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void lvListeProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
