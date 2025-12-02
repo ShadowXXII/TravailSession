@@ -15,6 +15,7 @@ namespace TravailSession
         public MainWindow()
         {
             InitializeComponent();
+            mainFrame.Navigate(typeof(Pages.Projets.AfficherProjets));
         }
 
         private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

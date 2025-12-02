@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -30,14 +31,10 @@ namespace TravailSession.Pages.Projets
             lvListeProjects.ItemsSource = Singleton.Singleton.getInstance().ListeP;
         }
 
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void lvListeProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Class.Projet projets = (Class.Projet)lvListeProjects.SelectedItem;
+            this.Frame.Navigate(typeof(Pages.Projets.ZoomProjets), projets);
         }
     }
 }

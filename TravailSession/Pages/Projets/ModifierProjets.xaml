@@ -10,5 +10,47 @@
 
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button x:Name="btPecedent" Click="btPecedent_Click" Grid.Row="0">Pécédent</Button>
+
+        <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
+
+            <StackPanel>
+                <TextBlock x:Name="tblNumeroProjet" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
+                <TextBox x:Name="tbxTitre" FontSize="18" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <StackPanel Spacing="25">
+                    <TextBlock x:Name="tblStatutFix" Text="Statut : "/>
+                    <TextBlock x:Name="tblDateDebutFix" Text="Date de debut: "/>
+                    <TextBlock x:Name="tblBudgetFix" Text="Budget : "/>
+                    <TextBlock x:Name="tblTotalSalairesFix" Text="Total salaires : "/>
+                    <TextBlock x:Name="tblNombreEmployesRequisFix" Text="Nombre d'employes requis: "/>
+                    
+                </StackPanel>
+
+                <StackPanel Spacing="10">
+                    <TextBox x:Name="tbxStatut"/>
+                    <CalendarDatePicker
+                        x:Name="calendarDatePkr"
+                        DateFormat="{}{day.integer} {month.full} {year.full}"
+                        />
+                    <TextBox x:Name="tbxBudget"/>
+                    <TextBox x:Name="tbxTotalSalaires"/>
+                    <TextBox x:Name="tbxNombreEmployesRequis"/>
+                    
+                </StackPanel>
+
+                <TextBox x:Name="tbxDescription"/>
+            </StackPanel>
+            
+            
+        </StackPanel>
+        <Button x:Name="btnEnregister" Click="btnEnregister_Click" Grid.Row="2">Enregister</Button>
     </Grid>
 </Page>
