@@ -15,10 +15,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button x:Name="btPecedent" Click="btPecedent_Click" Grid.Row="0">Pécédent</Button>
-        
+        <Grid x:Name="gridRacine"/>
         <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
             
-                <StackPanel>
+            <StackPanel>
                     <TextBlock x:Name="tblNumeroProjet" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
                     <TextBlock x:Name="tblTitre" FontSize="18" FontWeight="Bold"/>
                 </StackPanel>
@@ -33,7 +33,7 @@
                     <TextBlock x:Name="tblIdentifantFix" Text="Identifant clients: "/>
                     <TextBlock x:Name="tblClientsNameFix" Text="Noms clients: "/>
                 </StackPanel>
-                
+
                 <StackPanel>
                     <TextBlock x:Name="tblStatut"/>
                     <TextBlock x:Name="tblDateDebut"/>
@@ -46,6 +46,22 @@
 
                 <TextBlock x:Name="tblDescription"/>
             </StackPanel>
+            <ListView x:Name="lvEmployes">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="20">
+                            <TextBlock Text="{Binding Matricule}" Width="120"/>
+                            <TextBlock Text="{Binding Nom}" Width="150"/>
+                            <TextBlock Text="{Binding Prenom}" Width="150"/>
+                            <TextBlock Text="{Binding TauxHoraire}" Width="100"/>
+                            <TextBlock Text="{Binding Heures}" Width="80"/>
+                            <TextBlock Text="{Binding Salaire}" Width="120"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBox x:Name="tbxMatricule" Header="Matricule de l'employes"/>
+            <NumberBox x:Name="nbxHeure" Header="Le nombre d'heure de travailer par l'employe"/>
             <Button x:Name="btAjouterEmploye" Click="btAjouterEmploye_Click" Grid.Row="2">Ajouter Employe</Button>
         </StackPanel>
 

@@ -11,8 +11,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TravailSession.Class;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -52,7 +54,11 @@ namespace TravailSession.Pages.Projets
 
 
             }
+            var employes = Singleton.Singleton.getInstance().GetEmployesForProjet(projet.NumeroProjet);
+            lvEmployes.ItemsSource = employes;
 
+            double totalSalaires = employes.Sum(e => e.Salaire);
+            tblTotalSalaires.Text = totalSalaires + " $";
         }
 
         private void btPecedent_Click(object sender, RoutedEventArgs e)
@@ -67,9 +73,27 @@ namespace TravailSession.Pages.Projets
             this.Frame.Navigate(typeof(Pages.Projets.ModifierProjets), projet);
         }
 
-        private void btAjouterEmploye_Click(object sender, RoutedEventArgs e)
+        private async void btAjouterEmploye_Click(object sender, RoutedEventArgs e)
         {
+            string numeroProjet = tblNumeroProjet.Text;
+            string matricule = tbxMatricule.Text;
+            int heure = (int)nbxHeure.Value;
+            int currentCount = Singleton.Singleton.getInstance().GetEmployeCountForProjet(numeroProjet);
 
+            if (currentCount >= projet.NombreEmployesRequis)
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Limite atteinte";
+                    dialog.Content = "Vous ne pouvez plus ajouter d'employés. Le nombre requis est déjà atteint.";
+                    dialog.CloseButtonText = "OK";
+                    
+                };
+                var result = await dialog.ShowAsync();
+                return; 
+            }
+            Singleton.Singleton.getInstance().AjouterEmploye(matricule,numeroProjet,heure);
         }
     }
 }

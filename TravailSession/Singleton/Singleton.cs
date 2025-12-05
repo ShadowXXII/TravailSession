@@ -1,8 +1,7 @@
-﻿using Microsoft.UI.Xaml.Controls.Primitives;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.ObjectModel;
-using TravailSession.Class;
+using System.Diagnostics;
 
 namespace TravailSession.Singleton
 {
@@ -154,6 +153,66 @@ namespace TravailSession.Singleton
             {
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
+            }
+        }
+        public ObservableCollection<Class.EmployeProjet> GetEmployesForProjet(string numeroProjet)
+        {
+            ObservableCollection<Class.EmployeProjet> liste = new();
+
+            using MySqlConnection con = new MySqlConnection(connectionString);
+            using MySqlCommand commande = con.CreateCommand();
+
+            commande.CommandText = "SELECT E.matricule, E.nom, E.prenom, E.tauxHoraire, T.heure FROM Projets INNER JOIN Travail T on Projets.numeroProjet = T.numeroProjet INNER JOIN Employes E on T.matricule = E.matricule WHERE T.numeroProjet = @num;";
+            commande.Parameters.AddWithValue("@num", numeroProjet);
+
+            con.Open();
+            MySqlDataReader r = commande.ExecuteReader();
+
+            while (r.Read())
+            {
+                string matricule = r.GetString("matricule");
+                string nom = r.GetString("nom");
+                string prenom = r.GetString("prenom");
+                double tauxHoraire = r.GetDouble("tauxHoraire");
+                int heures = r.GetInt32("heure");
+                liste.Add(new Class.EmployeProjet(matricule, nom, prenom, tauxHoraire, heures));
+            }
+
+            return liste;
+        }
+
+        public int GetEmployeCountForProjet(string numeroProjet)
+        {
+            int count = 0;
+
+            using MySqlConnection con = new MySqlConnection(connectionString);
+            using MySqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM Travail WHERE numeroProjet = @num;";
+            cmd.Parameters.AddWithValue("@num", numeroProjet);
+
+            con.Open();
+            count = Convert.ToInt32(cmd.ExecuteScalar());
+
+            return count;
+        }
+
+        public void AjouterEmploye(String matricule, string numeroProjet, int heure)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO Travail(matricule, numeroProjet, heure) VALUES (@matricule, @numeroProjet, @heure); ";
+                commande.Parameters.AddWithValue("@matricule", matricule);
+                commande.Parameters.AddWithValue("@numeroProjet", numeroProjet);
+                commande.Parameters.AddWithValue("@heure", heure);
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
     }
