@@ -43,9 +43,9 @@ namespace TravailSession.Pages.Projets
             string titre = tbxTitre.Text;
             string statut = cbxStatut.SelectedItem as string;
             DateTime dateDebut = calendarDatePkr.Date.Value.DateTime;
-            double budget = nbxBudget.Value;
-            int nombreEmployesRequis = (int)nbxNombreEmployesRequis.Value;
-            int identifant = (int)nbxIdentifant.Value;
+            double budget = double.Parse(nbxBudget.Text); ;
+            int nombreEmployesRequis = int.Parse(nbxNombreEmployesRequis.Text);
+            int identifant = int.Parse(nbxIdentifant.Text);
             string description = tbxDescription.Text;
             double totalSalaires = 0;
 

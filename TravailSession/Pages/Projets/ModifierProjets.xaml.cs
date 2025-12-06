@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,9 +29,8 @@ namespace TravailSession.Pages.Projets
         public ModifierProjets()
         {
             InitializeComponent();
-
-            calendarDatePkr.MaxDate = new DateTime(2025, 11, 30);
-            calendarDatePkr.MinDate = DateTime.Now.AddYears(-35);
+            string[] liste = { "en cours", "termine" };
+            cbxStatut.ItemsSource = liste;
 
         }
 
@@ -43,8 +43,7 @@ namespace TravailSession.Pages.Projets
             {
                 tblNumeroProjet.Text = projet.NumeroProjet;
                 tbxTitre.Text = projet.Titre;
-                tbxStatut.Text = projet.Statut;
-                calendarDatePkr.Date =  projet.DateDebut;
+                cbxStatut.Text = projet.Statut;
                 nbxBudget.Text = projet.Budget.ToString();
                 nbxTotalSalaires.Text = projet.TotalSalaires.ToString();
                 nbxNombreEmployesRequis.Text = projet.NombreEmployesRequis.ToString();
@@ -62,12 +61,51 @@ namespace TravailSession.Pages.Projets
 
         private void btnEnregister_Click(object sender, RoutedEventArgs e)
         {
+            if (projet == null)
+                return;
 
+            string numeroProjet = projet.NumeroProjet;
+            string titre = tbxTitre.Text;
+            string statut = cbxStatut.SelectedItem?.ToString();
+            string description = tbxDescription.Text;
+            double budget = double.Parse(nbxBudget.Text);
+            int totalSalaires = int.Parse(nbxTotalSalaires.Text);
+            int nombreEmployesRequis = int.Parse(nbxNombreEmployesRequis.Text);
+
+            Singleton.Singleton.getInstance().ModifierProjets( titre,  statut,  description,  budget,  totalSalaires,  nombreEmployesRequis,  numeroProjet);
+
+            if (Frame.CanGoBack)
+                Frame.GoBack();
         }
 
-        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
+            if (projet == null)
+                return;
 
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            dialog.Title = "Supprimer";
+            dialog.Content = "Voulez-vous vraiment supprimer ce projet?";
+            dialog.PrimaryButtonText = "Oui";
+            dialog.CloseButtonText = "Annuler";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+
+            ContentDialogResult resultat = await dialog.ShowAsync();
+
+            if (resultat == ContentDialogResult.Primary)
+            {
+                Singleton.Singleton.getInstance().supprimerProjet(projet.NumeroProjet);
+
+                this.Frame.Navigate(typeof(Pages.Projets.AfficherProjets));
+            }
+               
+            else
+            {
+                if (Frame.CanGoBack)
+                    Frame.GoBack();
+            }
+                
         }
     }
 }

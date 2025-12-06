@@ -268,5 +268,53 @@ namespace TravailSession.Singleton
                 Debug.WriteLine(ex.Message);
             }
         }
+        public void ModifierProjets(string titre, string statut, string description, double budget, double totalSalaires, int nombreEmployesRequis, string numeroProjet)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "UPDATE Projets SET titre = @titre, statut = @statut,  description = '@description', budget = @budget, nombreEmplyesRequis = @nombreEmplyesRequis, totalSalaires = @totalSalaires WHERE numeroProjet = @numeroProjet;";
+                commande.Parameters.AddWithValue("@titre", titre);
+                commande.Parameters.AddWithValue("@budget", budget);
+                commande.Parameters.AddWithValue("@description", description);
+                commande.Parameters.AddWithValue("@nombreEmplyesRequis", nombreEmployesRequis);
+                commande.Parameters.AddWithValue("@totalSalaires", totalSalaires);
+                commande.Parameters.AddWithValue("@statut", statut);
+                commande.Parameters.AddWithValue("@numeroProjet", numeroProjet);
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public void supprimerProjet(string numeroProjet)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+
+                
+                commande.CommandText = "DELETE FROM Travail WHERE numeroProjet = @numeroProjet;";
+                commande.Parameters.AddWithValue("@numeroProjet", numeroProjet);
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+                
+                commande.CommandText = "DELETE FROM Projets WHERE numeroProjet = @numeroProjet;";
+                commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
     }
 }

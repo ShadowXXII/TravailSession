@@ -27,7 +27,6 @@
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <StackPanel Spacing="25">
                     <TextBlock x:Name="tblStatutFix" Text="Statut : "/>
-                    <TextBlock x:Name="tblDateDebutFix" Text="Date de debut: "/>
                     <TextBlock x:Name="tblBudgetFix" Text="Budget : "/>
                     <TextBlock x:Name="tblTotalSalairesFix" Text="Total salaires : "/>
                     <TextBlock x:Name="tblNombreEmployesRequisFix" Text="Nombre d'employes requis: "/>
@@ -35,11 +34,7 @@
                 </StackPanel>
 
                 <StackPanel Spacing="10">
-                    <TextBox x:Name="tbxStatut"/>
-                    <CalendarDatePicker
-                        x:Name="calendarDatePkr"
-                        DateFormat="{}{day.integer} {month.full} {year.full}"
-                        />
+                    <ComboBox x:Name="cbxStatut" SelectedIndex="0" Header="Statut : "/>
                     <NumberBox x:Name="nbxBudget"/>
                     <NumberBox x:Name="nbxTotalSalaires"/>
                     <NumberBox x:Name="nbxNombreEmployesRequis"/>
@@ -51,7 +46,10 @@
             
             
         </StackPanel>
-        <Button x:Name="btnEnregister" Click="btnEnregister_Click" Grid.Row="2">Enregister</Button>
-        <Button x:Name="btnSupprimer" Click="btnSupprimer_Click" Grid.Row="2">Supprimer</Button>
+        <StackPanel Grid.Row="2">
+            <Button x:Name="btnEnregister" Click="btnEnregister_Click" >Enregister</Button>
+            <Button x:Name="btnSupprimer" Click="btnSupprimer_Click">Supprimer</Button>  
+        </StackPanel>
+        
     </Grid>
 </Page>
