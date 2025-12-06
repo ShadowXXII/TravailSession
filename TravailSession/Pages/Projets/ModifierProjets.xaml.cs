@@ -45,9 +45,9 @@ namespace TravailSession.Pages.Projets
                 tbxTitre.Text = projet.Titre;
                 tbxStatut.Text = projet.Statut;
                 calendarDatePkr.Date =  projet.DateDebut;
-                tbxBudget.Text = projet.Budget.ToString();
-                tbxTotalSalaires.Text = projet.TotalSalaires.ToString();
-                tbxNombreEmployesRequis.Text = projet.NombreEmployesRequis.ToString();
+                nbxBudget.Text = projet.Budget.ToString();
+                nbxTotalSalaires.Text = projet.TotalSalaires.ToString();
+                nbxNombreEmployesRequis.Text = projet.NombreEmployesRequis.ToString();
                 tbxDescription.Text = projet.Description;
 
             }
@@ -61,6 +61,11 @@ namespace TravailSession.Pages.Projets
         }
 
         private void btnEnregister_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
 
         }

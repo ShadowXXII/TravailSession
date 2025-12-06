@@ -19,6 +19,7 @@ namespace TravailSession.Class
             this.prenom = prenom;
             this.tauxHoraire = tauxHoraire;
             this.heure = heure;
+            this.salaire = tauxHoraire * heure;
         }
 
         public string Matricule { get => matricule; }

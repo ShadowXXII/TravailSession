@@ -1,21 +1,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using TravailSession.Class;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -69,7 +56,7 @@ namespace TravailSession.Pages.Projets
 
         private void btModifier_Click(object sender, RoutedEventArgs e)
         {
-            
+
             this.Frame.Navigate(typeof(Pages.Projets.ModifierProjets), projet);
         }
 
@@ -80,6 +67,35 @@ namespace TravailSession.Pages.Projets
             int heure = (int)nbxHeure.Value;
             int currentCount = Singleton.Singleton.getInstance().GetEmployeCountForProjet(numeroProjet);
 
+            if (Singleton.Singleton.getInstance().EmployeExiste(matricule))
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Matricule introuvable";
+                    dialog.Content = "Ce matricule n'existe pas dans la base de données.";
+                    dialog.CloseButtonText = "OK";
+                }
+                ;
+                var result = await dialog.ShowAsync();
+                return;
+            }
+
+            if (Singleton.Singleton.getInstance().EmployeOccupe(matricule))
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Employé déjà occupé";
+                    dialog.Content = "Cet employé travaille déjà sur un autre projet qui n'est pas terminé.";
+                    dialog.CloseButtonText = "OK";
+                }
+                ;
+                var result = await dialog.ShowAsync();
+                return;
+            }
+
+
             if (currentCount >= projet.NombreEmployesRequis)
             {
                 ContentDialog dialog = new ContentDialog();
@@ -88,12 +104,13 @@ namespace TravailSession.Pages.Projets
                     dialog.Title = "Limite atteinte";
                     dialog.Content = "Vous ne pouvez plus ajouter d'employés. Le nombre requis est déjà atteint.";
                     dialog.CloseButtonText = "OK";
-                    
-                };
+
+                }
+                ;
                 var result = await dialog.ShowAsync();
-                return; 
+                return;
             }
-            Singleton.Singleton.getInstance().AjouterEmploye(matricule,numeroProjet,heure);
+            Singleton.Singleton.getInstance().AjouterEmployeProjets(matricule, numeroProjet, heure);
         }
     }
 }

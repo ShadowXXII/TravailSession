@@ -16,7 +16,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button x:Name="btPecedent" Click="btPecedent_Click" Grid.Row="0">Pécédent</Button>
-
+        <Grid x:Name="gridRacine"/>
         <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
 
             <StackPanel>
@@ -40,17 +40,18 @@
                         x:Name="calendarDatePkr"
                         DateFormat="{}{day.integer} {month.full} {year.full}"
                         />
-                    <TextBox x:Name="tbxBudget"/>
-                    <TextBox x:Name="tbxTotalSalaires"/>
-                    <TextBox x:Name="tbxNombreEmployesRequis"/>
+                    <NumberBox x:Name="nbxBudget"/>
+                    <NumberBox x:Name="nbxTotalSalaires"/>
+                    <NumberBox x:Name="nbxNombreEmployesRequis"/>
                     
                 </StackPanel>
 
-                <TextBox x:Name="tbxDescription"/>
+                <TextBox x:Name="tbxDescription" Header="Description: "/>
             </StackPanel>
             
             
         </StackPanel>
         <Button x:Name="btnEnregister" Click="btnEnregister_Click" Grid.Row="2">Enregister</Button>
+        <Button x:Name="btnSupprimer" Click="btnSupprimer_Click" Grid.Row="2">Supprimer</Button>
     </Grid>
 </Page>

@@ -43,7 +43,7 @@
                     <TextBlock x:Name="tblIdentifant"/>
                     <TextBlock x:Name="tblClientsName"/>
                 </StackPanel>
-
+                <TextBlock x:Name="tblHeaderDescription" Text="Description:"/>
                 <TextBlock x:Name="tblDescription"/>
             </StackPanel>
             <ListView x:Name="lvEmployes">

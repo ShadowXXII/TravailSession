@@ -8,7 +8,39 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="AntiqueWhite">
+    <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button x:Name="btPecedent" Click="btPecedent_Click" Grid.Row="0">Pécédent</Button>
+        <Grid x:Name="gridRacine"/>
+        <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
+
+            <StackPanel>
+                <TextBlock x:Name="tblNumeroProjet" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman" Text="Créer un projets"/>
+                <TextBox x:Name="tbxTitre" FontSize="18" FontWeight="Bold" Header="Titre:"/>
+            </StackPanel>
+
+            <StackPanel Spacing="10">
+                <ComboBox x:Name="cbxStatut" SelectedIndex="0" Header="Statut : "/>
+                <CalendarDatePicker
+                    x:Name="calendarDatePkr"
+                    DateFormat="{}{day.integer} {month.full} {year.full}"
+                    Header="Date de debut: "
+                    />
+                    <NumberBox x:Name="nbxBudget" Header="Budget :"/>
+                    <NumberBox x:Name="nbxNombreEmployesRequis" Header="Nombre d'employes requis: "/>
+                    <NumberBox x:Name="nbxIdentifant" Header="Identifant clients: "/>
+                </StackPanel>
+
+                <TextBox x:Name="tbxDescription" Header="Description: "/>
+
+
+
+        </StackPanel>
+        <Button x:Name="btnEnregister" Click="btnEnregister_Click" Grid.Row="2">Enregister</Button>
     </Grid>
 </Page>
