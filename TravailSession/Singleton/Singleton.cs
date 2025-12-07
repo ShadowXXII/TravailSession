@@ -1,5 +1,4 @@
-﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -277,7 +276,7 @@ namespace TravailSession.Singleton
                 using MySqlConnection con = new MySqlConnection(connectionString);
                 using MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
-                commande.CommandText = "UPDATE Projets SET titre = @titre, statut = @statut,  description = '@description', budget = @budget, nombreEmplyesRequis = @nombreEmplyesRequis, totalSalaires = @totalSalaires WHERE numeroProjet = @numeroProjet;";
+                commande.CommandText = "UPDATE Projets SET titre = @titre, statut = @statut,  description = @description, budget = @budget, nombreEmplyesRequis = @nombreEmplyesRequis, totalSalaires = @totalSalaires WHERE numeroProjet = @numeroProjet;";
                 commande.Parameters.AddWithValue("@titre", titre);
                 commande.Parameters.AddWithValue("@budget", budget);
                 commande.Parameters.AddWithValue("@description", description);
@@ -302,14 +301,14 @@ namespace TravailSession.Singleton
                 using MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
 
-                
+
                 commande.CommandText = "DELETE FROM Travail WHERE numeroProjet = @numeroProjet;";
                 commande.Parameters.AddWithValue("@numeroProjet", numeroProjet);
 
                 con.Open();
                 commande.ExecuteNonQuery();
 
-                
+
                 commande.CommandText = "DELETE FROM Projets WHERE numeroProjet = @numeroProjet;";
                 commande.ExecuteNonQuery();
             }
@@ -342,7 +341,7 @@ namespace TravailSession.Singleton
                 Debug.WriteLine(ex.Message);
             }
         }
-        public void ModifierEmploye(string matricule, string nom, string prenom, string email, string photoIdentite,double tauxHoraire)
+        public void ModifierEmploye(string matricule, string nom, string prenom, string email, string photoIdentite, double tauxHoraire)
         {
             try
             {
@@ -356,7 +355,7 @@ namespace TravailSession.Singleton
                 commande.Parameters.AddWithValue("@tauxHoraire", tauxHoraire);
                 commande.Parameters.AddWithValue("@photoIdentite", photoIdentite);
                 commande.Parameters.AddWithValue("@matricule", matricule);
-                
+
                 con.Open();
                 int i = commande.ExecuteNonQuery();
             }

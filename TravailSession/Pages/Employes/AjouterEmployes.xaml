@@ -15,26 +15,35 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Button x:Name="btPecedent" Click="btPecedent_Click" Grid.Row="0">Pécédent</Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button x:Name="btPecedent" Click="btPecedent_Click" >Pécédent</Button>
+            <Button x:Name="btnAjouter" Content="Ajouter" Click="btnAjouter_Click"/>
+        </StackPanel>
         <Grid x:Name="gridRacine"/>
-        <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
+        <StackPanel Grid.Row="1" Padding="0 10 0 0">
             <TextBlock x:Name="tblTitre" Text="Créer Employes" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
             <TextBox x:Name="tbxNom" FontSize="18" FontWeight="Bold" Header="Nom:"/>
+            <TextBlock x:Name="tblErreurNom"/>
             <TextBox x:Name="tbxPrenom" FontSize="18" FontWeight="Bold" Header="Prenom:"/>
+            <TextBlock x:Name="tblErreurPrenom"/>
             <CalendarDatePicker
                     x:Name="calendarDateNaissance"
                     DateFormat="{}{day.integer} {month.full} {year.full}"
                     Header="Date de naissance: "
                     />
+            <TextBlock x:Name="tblErreurDateNaissance"/>
             <TextBox x:Name="tbxEmail" Header="Email"/>
-            <TextBox x:Name="tbxLien" Header="Lien pour l'image de profile"/>
+            <TextBlock x:Name="tblErreurEmail"/>
+            <TextBox x:Name="tbxPhotoIdentite" Header="Lien pour l'image de profile"/>
+            <TextBlock x:Name="tblErreurPhotoIdentite"/>
             <CalendarDatePicker
                     x:Name="calendarDateEmbauce"
                     DateFormat="{}{day.integer} {month.full} {year.full}"
                     Header="Date d'embauce: "
                     />
+            <TextBlock x:Name="tblErreurDateEmbauce"/>
             <NumberBox x:Name="nbxTauxHoraire" Header="Taux horaire :"/>
-            <Button x:Name="btnAjouter" Content="Ajouter" Click="btnAjouter_Click"/>
+            <TextBlock x:Name="tblErreurHoraire"/>
         </StackPanel>
     </Grid>
 </Page>

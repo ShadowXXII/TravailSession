@@ -1,19 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using TravailSession.Class;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -59,23 +47,92 @@ namespace TravailSession.Pages.Projets
                 this.Frame.GoBack();
         }
 
-        private void btnEnregister_Click(object sender, RoutedEventArgs e)
+        private async void btnEnregister_Click(object sender, RoutedEventArgs e)
         {
             if (projet == null)
                 return;
-
+            bool Validation = true;
             string numeroProjet = projet.NumeroProjet;
             string titre = tbxTitre.Text;
             string statut = cbxStatut.SelectedItem?.ToString();
             string description = tbxDescription.Text;
-            double budget = double.Parse(nbxBudget.Text);
-            int totalSalaires = int.Parse(nbxTotalSalaires.Text);
-            int nombreEmployesRequis = int.Parse(nbxNombreEmployesRequis.Text);
+            tblErreurTitre.Text = string.Empty;
+            tblErreurBudget.Text = string.Empty;
+            tblErreurDescription.Text = string.Empty;
+            tblErreurNombreEmployesRequis.Text = string.Empty;
+            tblErreurTotalSalaires.Text = string.Empty;
 
-            Singleton.Singleton.getInstance().ModifierProjets( titre,  statut,  description,  budget,  totalSalaires,  nombreEmployesRequis,  numeroProjet);
+            if (!double.TryParse(nbxBudget.Text, out double budget))
+            {
+                tblErreurBudget.Text = "Veuillez entrer un budget valide.";
+                Validation = false;
+            }
 
-            if (Frame.CanGoBack)
-                Frame.GoBack();
+            if (!double.TryParse(nbxTotalSalaires.Text, out double totalSalaires))
+            {
+                tblErreurTotalSalaires.Text = "Veuillez entrer un total des salaires valide.";
+                Validation = false;
+            }
+
+            if (!int.TryParse(nbxNombreEmployesRequis.Text, out int nombreEmployesRequis))
+            {
+                tblErreurNombreEmployesRequis.Text = "Veuillez entrer un nombre valide.";
+                Validation = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(titre))
+            {
+                tblErreurTitre.Text = "Veuillez enter le titre du projet";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                tblErreurDescription.Text = "Veuillez enter une description au projet";
+                Validation = false;
+            }
+            if (budget < totalSalaires)
+            {
+                tblErreurBudget.Text = "Le budget ne peux pas être plus petit que le total des salaires";
+                Validation = false;
+            }
+            if (budget <= 0)
+            {
+                tblErreurBudget.Text = "Le budget ne peux pas être plus petit ou égale a 0";
+                Validation = false;
+            }
+            if (totalSalaires < 0)
+            {
+                tblErreurTotalSalaires.Text = "Le le total des salaires ne peux pas être inférieur a 0";
+                Validation = false;
+            }
+            if (nombreEmployesRequis > 5)
+            {
+                tblErreurNombreEmployesRequis.Text = "Le nombre maximale pour un projet est 5 employes";
+                Validation = false;
+            }
+            if (nombreEmployesRequis <= 0)
+            {
+                tblErreurNombreEmployesRequis.Text = "Le nombre minimale pour un projet est 1 employes";
+                Validation = false;
+            }
+
+            if (Validation)
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Projet Modifier";
+                    dialog.Content = "Le projet a été modifier";
+                    dialog.CloseButtonText = "OK";
+                }
+                ;
+                var result = await dialog.ShowAsync();
+
+                Singleton.Singleton.getInstance().ModifierProjets(titre, statut, description, budget, totalSalaires, nombreEmployesRequis, numeroProjet);
+
+                if (Frame.CanGoBack)
+                    Frame.GoBack();
+            }
         }
 
         private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
@@ -99,13 +156,13 @@ namespace TravailSession.Pages.Projets
 
                 this.Frame.Navigate(typeof(Pages.Projets.AfficherProjets));
             }
-               
+
             else
             {
                 if (Frame.CanGoBack)
                     Frame.GoBack();
             }
-                
+
         }
     }
 }

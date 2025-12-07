@@ -62,56 +62,62 @@ namespace TravailSession.Pages.Projets
 
         private async void btAjouterEmploye_Click(object sender, RoutedEventArgs e)
         {
+            bool Validation = true;
             string numeroProjet = tblNumeroProjet.Text;
             string matricule = tbxMatricule.Text;
             int heure = (int)nbxHeure.Value;
             int currentCount = Singleton.Singleton.getInstance().GetEmployeCountForProjet(numeroProjet);
+            tblErreurMatricule.Text = string.Empty;
+            tblErreurHeure.Text = string.Empty;
 
             if (Singleton.Singleton.getInstance().EmployeNExistePas(matricule))
             {
-                ContentDialog dialog = new ContentDialog();
-                {
-                    dialog.XamlRoot = gridRacine.XamlRoot;
-                    dialog.Title = "Matricule introuvable";
-                    dialog.Content = "Ce matricule n'existe pas dans la base de données.";
-                    dialog.CloseButtonText = "OK";
-                }
-                ;
-                var result = await dialog.ShowAsync();
-                return;
+                tblErreurMatricule.Text = "Ce matricule n'existe pas dans la base de données.";
+                Validation = false;
             }
 
             if (Singleton.Singleton.getInstance().EmployeOccupe(matricule))
             {
-                ContentDialog dialog = new ContentDialog();
+                tblErreurMatricule.Text = "Cet employé travaille déjà sur un autre projet qui n'est pas terminé.";
+                Validation = false;
+            }
+
+            if (currentCount >= projet.NombreEmployesRequis)
+            {
+                ContentDialog dialogTropEmployes = new ContentDialog();
                 {
-                    dialog.XamlRoot = gridRacine.XamlRoot;
-                    dialog.Title = "Employé déjà occupé";
-                    dialog.Content = "Cet employé travaille déjà sur un autre projet qui n'est pas terminé.";
-                    dialog.CloseButtonText = "OK";
+                    dialogTropEmployes.XamlRoot = gridRacine.XamlRoot;
+                    dialogTropEmployes.Title = "Limite atteinte";
+                    dialogTropEmployes.Content = "Vous ne pouvez plus ajouter d'employés. Le nombre requis est déjà atteint.";
+                    dialogTropEmployes.CloseButtonText = "OK";
+
                 }
                 ;
-                var result = await dialog.ShowAsync();
+                var resultTropEmployes = await dialogTropEmployes.ShowAsync();
+                Validation = false;
                 return;
             }
 
 
-            if (currentCount >= projet.NombreEmployesRequis)
+            if (heure <= 0)
+            {
+                tblErreurHeure.Text = "L'heure de trvail sur le project ne peux pas être négatif";
+            }
+
+            if (Validation)
             {
                 ContentDialog dialog = new ContentDialog();
                 {
                     dialog.XamlRoot = gridRacine.XamlRoot;
-                    dialog.Title = "Limite atteinte";
-                    dialog.Content = "Vous ne pouvez plus ajouter d'employés. Le nombre requis est déjà atteint.";
+                    dialog.Title = "Employe Ajouter";
+                    dialog.Content = "L'employe a été ajouter au projets";
                     dialog.CloseButtonText = "OK";
-
                 }
                 ;
                 var result = await dialog.ShowAsync();
-                return;
+                Singleton.Singleton.getInstance().AjouterEmployeProjets(matricule, numeroProjet, heure);
+                lvEmployes.ItemsSource = Singleton.Singleton.getInstance().GetEmployesForProjet(numeroProjet);
             }
-            Singleton.Singleton.getInstance().AjouterEmployeProjets(matricule, numeroProjet, heure);
-            lvEmployes.ItemsSource = Singleton.Singleton.getInstance().GetEmployesForProjet(numeroProjet);
         }
     }
 }

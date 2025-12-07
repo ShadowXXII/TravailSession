@@ -20,9 +20,13 @@
         <StackPanel Grid.Row="1" Spacing="10" Padding="0 20 0 0">
             <TextBlock x:Name="tblTitre" Text="Créer un Client" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
             <TextBox x:Name="tbxNom" FontSize="18" FontWeight="Bold" Header="Nom: "/>
+            <TextBlock x:Name="tblErreurNom"/>
             <TextBox x:Name="tbxAdresse" Header="Adresse: "/>
+            <TextBlock x:Name="tblErreurAdresse"/>
             <TextBox x:Name="tbxNumeroTelephone" Header="Numéro de téléphone :"/>
+            <TextBlock x:Name="tblErreurNumeroTelephone"/>
             <TextBox x:Name="tbxEmail" Header="Email: "/>
+            <TextBlock x:Name="tblErreurEmail"/>
             <Button x:Name="btnAjouter" Content="Ajouter" Click="btnAjouter_Click"/>
         </StackPanel>
     </Grid>

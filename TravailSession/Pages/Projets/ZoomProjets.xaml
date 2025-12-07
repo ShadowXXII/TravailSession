@@ -61,7 +61,9 @@
                 </ListView.ItemTemplate>
             </ListView>
             <TextBox x:Name="tbxMatricule" Header="Matricule de l'employes"/>
+            <TextBlock x:Name="tblErreurMatricule"/>
             <NumberBox x:Name="nbxHeure" Header="Le nombre d'heure de travailer par l'employe"/>
+            <TextBlock x:Name="tblErreurHeure"/>
             <Button x:Name="btAjouterEmploye" Click="btAjouterEmploye_Click" Grid.Row="2">Ajouter Employe</Button>
         </StackPanel>
 

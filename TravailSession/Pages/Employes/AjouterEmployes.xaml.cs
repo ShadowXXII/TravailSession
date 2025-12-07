@@ -1,17 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Text.RegularExpressions;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,18 +27,89 @@ namespace TravailSession.Pages.Employes
                 this.Frame.GoBack();
         }
 
-        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        private async void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
+            bool Validation = true;
+            string expression = "^[a-zA-Z][a-zA-Z0-9._-]*@[A-Za-z0-9.-]+\\.com$";
+
             string nom = tbxNom.Text;
             string prenom = tbxPrenom.Text;
-            string photoIdentite = tbxLien.Text;
-            DateTime dateNaissance = calendarDateNaissance.Date.Value.DateTime;
-            string email=tbxEmail.Text;
-            DateTime dateEmbauche = calendarDateEmbauce.Date.Value.DateTime;
-            double tauxHoraire = double.Parse(nbxTauxHoraire.Text);
-            Singleton.Singleton.getInstance().AjouterEmploye( nom,  prenom,  email,  photoIdentite,  dateNaissance,  dateEmbauche,  tauxHoraire);
-            Singleton.Singleton.getInstance().getAllEmployes();
-            this.Frame.Navigate(typeof(Pages.Employes.AfficherEmployes));
+            string photoIdentite = tbxPhotoIdentite.Text;
+            string email = tbxEmail.Text;
+            tblErreurNom.Text = string.Empty;
+            tblErreurPrenom.Text = string.Empty;
+            tblErreurEmail.Text = string.Empty;
+            tblErreurPhotoIdentite.Text = string.Empty;
+            tblErreurHoraire.Text = string.Empty;
+            tblErreurDateNaissance.Text = string.Empty;
+            tblErreurDateEmbauce.Text = string.Empty;
+
+            DateTime? dateNaissance = calendarDateNaissance.Date?.DateTime;
+            if (dateNaissance == null)
+            {
+                tblErreurDateNaissance.Text = "Veuillez sélectionner une date de naissance.";
+                Validation = false;
+            }
+            DateTime? dateEmbauche = calendarDateEmbauce.Date?.DateTime;
+            if (dateEmbauche == null)
+            {
+                tblErreurDateEmbauce.Text = "Veuillez sélectionner une date d'embauche.";
+                Validation = false;
+            }
+            double tauxHoraire = 0;
+            if (!double.TryParse(nbxTauxHoraire.Text, out tauxHoraire))
+            {
+                tblErreurHoraire.Text = "Veuillez entrer un taux horaire valide.";
+                Validation = false;
+            }
+            if (tauxHoraire > 75)
+            {
+                tblErreurHoraire.Text = "Veuillez entrer un taux horaire résonable.";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(nom))
+            {
+                tblErreurNom.Text = "Veuillez enter un nom";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(prenom))
+            {
+                tblErreurPrenom.Text = "Veuillez enter un prenom";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email";
+                Validation = false;
+            }
+            if (!Regex.IsMatch(email, expression))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email valide";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(photoIdentite))
+            {
+                tblErreurPhotoIdentite.Text = "Veuillez enter un lien pour une photo de profile";
+                Validation = false;
+            }
+
+            if (Validation)
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Employe Ajouter";
+                    dialog.Content = "L'employé a été ajouter";
+                    dialog.CloseButtonText = "OK";
+                }
+
+                var result = await dialog.ShowAsync();
+
+                Singleton.Singleton.getInstance().AjouterEmploye(nom, prenom, email, photoIdentite, dateNaissance.Value, dateEmbauche.Value, tauxHoraire);
+                Singleton.Singleton.getInstance().getAllEmployes();
+                this.Frame.Navigate(typeof(Pages.Employes.AfficherEmployes));
+            }
+
         }
     }
 }

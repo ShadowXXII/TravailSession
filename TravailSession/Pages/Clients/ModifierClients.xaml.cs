@@ -1,18 +1,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using TravailSession.Class;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Text.RegularExpressions;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -81,20 +71,66 @@ namespace TravailSession.Pages.Clients
             }
         }
 
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        private async void btnModifier_Click(object sender, RoutedEventArgs e)
         {
             if (client == null)
                 return;
+            bool Validation = true;
+            string expression = "^[a-zA-Z][a-zA-Z0-9._-]*@[A-Za-z0-9.-]+\\.com$";
 
             int identifiant = client.Identifiant;
             string nom = tbxNom.Text;
             string adresse = tbxAdresse.Text;
             string numeroTelephone = tbxNumeroTelephone.Text;
             string email = tbxEmail.Text;
+            tblErreurNom.Text = string.Empty;
+            tblErreurAdresse.Text = string.Empty;
+            tblErreurNumeroTelephone.Text = string.Empty;
+            tblErreurEmail.Text = string.Empty;
 
-            Singleton.Singleton.getInstance().ModifierClient( identifiant,  nom,  adresse,  numeroTelephone,  email);
-            Singleton.Singleton.getInstance().getAllClients();
-            this.Frame.Navigate(typeof(Pages.Clients.AfficherClients));
+            if (string.IsNullOrWhiteSpace(nom))
+            {
+                tblErreurNom.Text = "Veuillez enter un nom";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(adresse))
+            {
+                tblErreurAdresse.Text = "Veuillez enter une adresse";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email";
+                Validation = false;
+            }
+            if (!Regex.IsMatch(email, expression))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email valide";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(numeroTelephone))
+            {
+                tblErreurNumeroTelephone.Text = "Veuillez enter un numéro de téléphone";
+                Validation = false;
+            }
+
+            if (Validation)
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Client Modifier";
+                    dialog.Content = "Le client a été modifier";
+                    dialog.CloseButtonText = "OK";
+                }
+
+                var result = await dialog.ShowAsync();
+
+                Singleton.Singleton.getInstance().ModifierClient(identifiant, nom, adresse, numeroTelephone, email);
+                Singleton.Singleton.getInstance().getAllClients();
+                this.Frame.Navigate(typeof(Pages.Clients.AfficherClients));
+            }
+            
         }
     }
 }

@@ -1,18 +1,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using TravailSession.Class;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Text.RegularExpressions;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -41,7 +31,7 @@ namespace TravailSession.Pages.Employes
                 tbxNom.Text = employe.Nom;
                 tbxPrenom.Text = employe.Prenom;
                 tbxEmail.Text = employe.Email;
-                tbxLien.Text = employe.PhotoIdentite;
+                tbxPhotoIdentite.Text = employe.PhotoIdentite;
                 nbxTauxHoraire.Value = employe.TauxHoraire;
 
             }
@@ -54,21 +44,70 @@ namespace TravailSession.Pages.Employes
                 this.Frame.GoBack();
         }
 
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        private async void btnModifier_Click(object sender, RoutedEventArgs e)
         {
             if (employe == null)
                 return;
-
+            bool Validation = true;
+            string expression = "^[a-zA-Z][a-zA-Z0-9._-]*@[A-Za-z0-9.-]+\\.com$";
             string matricule = employe.Matricule;
             string nom = tbxNom.Text;
             string prenom = tbxPrenom.Text;
             string email = tbxEmail.Text;
-            string PhotoIdentite = tbxLien.Text;
-            double tauxHoraire = nbxTauxHoraire.Value;
+            string photoIdentite = tbxPhotoIdentite.Text;
+            tblErreurNom.Text = string.Empty;
+            tblErreurPrenom.Text = string.Empty;
+            tblErreurEmail.Text = string.Empty;
+            tblErreurPhotoIdentite.Text = string.Empty;
+            tblErreurHoraire.Text = string.Empty;
 
-            Singleton.Singleton.getInstance().ModifierEmploye(matricule, nom, prenom, email, PhotoIdentite, tauxHoraire);
-            Singleton.Singleton.getInstance().getAllEmployes();
-            this.Frame.Navigate(typeof(Pages.Employes.AfficherEmployes));
+
+            if (!double.TryParse(nbxTauxHoraire.Text, out double tauxHoraire))
+            {
+                tblErreurHoraire.Text = "Veuillez entrer un  salaire valide.";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(nom))
+            {
+                tblErreurNom.Text = "Veuillez enter un nom";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(prenom))
+            {
+                tblErreurPrenom.Text = "Veuillez enter un prenom";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email";
+                Validation = false;
+            }
+            if (!Regex.IsMatch(email, expression))
+            {
+                tblErreurEmail.Text = "Veuillez enter un email valide";
+                Validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(photoIdentite))
+            {
+                tblErreurPhotoIdentite.Text = "Veuillez enter un lien pour une photo de profile";
+                Validation = false;
+            }
+            if (Validation)
+            {
+                ContentDialog dialog = new ContentDialog();
+                {
+                    dialog.XamlRoot = gridRacine.XamlRoot;
+                    dialog.Title = "Employe Modifier";
+                    dialog.Content = "L'employé a été modifier";
+                    dialog.CloseButtonText = "OK";
+                }
+
+                var result = await dialog.ShowAsync();
+
+                Singleton.Singleton.getInstance().ModifierEmploye(matricule, nom, prenom, email, photoIdentite, tauxHoraire);
+                Singleton.Singleton.getInstance().getAllEmployes();
+                this.Frame.Navigate(typeof(Pages.Employes.AfficherEmployes));
+            }
         }
 
         private async void btnSupprimer_Click(object sender, RoutedEventArgs e)
