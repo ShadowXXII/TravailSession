@@ -26,6 +26,29 @@ namespace TravailSession.Pages.Employes
         public AjouterEmployes()
         {
             InitializeComponent();
+            calendarDateNaissance.MinDate = DateTime.Now.AddYears(-65);
+            calendarDateNaissance.MaxDate = DateTime.Now.AddYears(-18);
+            calendarDateEmbauce.MaxDate = DateTime.Now;
+        }
+
+        private void btPecedent_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+                this.Frame.GoBack();
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+            string nom = tbxNom.Text;
+            string prenom = tbxPrenom.Text;
+            string photoIdentite = tbxLien.Text;
+            DateTime dateNaissance = calendarDateNaissance.Date.Value.DateTime;
+            string email=tbxEmail.Text;
+            DateTime dateEmbauche = calendarDateEmbauce.Date.Value.DateTime;
+            double tauxHoraire = double.Parse(nbxTauxHoraire.Text);
+            Singleton.Singleton.getInstance().AjouterEmploye( nom,  prenom,  email,  photoIdentite,  dateNaissance,  dateEmbauche,  tauxHoraire);
+            Singleton.Singleton.getInstance().getAllEmployes();
+            this.Frame.Navigate(typeof(Pages.Employes.AfficherEmployes));
         }
     }
 }

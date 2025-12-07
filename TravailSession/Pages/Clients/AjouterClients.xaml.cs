@@ -27,5 +27,23 @@ namespace TravailSession.Pages.Clients
         {
             InitializeComponent();
         }
+
+        private void btPecedent_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+                this.Frame.GoBack();
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+            string nom = tbxNom.Text;
+            string address = tbxAdresse.Text;
+            string numeroTelephone = tbxNumeroTelephone.Text;
+            string email = tbxEmail.Text;
+
+            Singleton.Singleton.getInstance().AjouterClient(nom, address, numeroTelephone, email);
+            Singleton.Singleton.getInstance().getAllClients();
+            this.Frame.Navigate(typeof(Pages.Clients.AfficherClients));
+        }
     }
 }

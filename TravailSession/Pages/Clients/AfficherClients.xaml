@@ -9,6 +9,16 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <TextBlock x:Name="tblTitre" Text="list des clients" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman"/>
         <ListView x:Name="lvListeClients"/>
+        </StackPanel>
+
+        <Button x:Name="btModifier" Click="btModifier_Click" Grid.Column="1" Content="Modifier"/>
     </Grid>
 </Page>

@@ -1,38 +1,10 @@
 # To Do List
 
-#### Projets
-
-* Afficher projets
-* Zoom projets
-* Ajouter projet
-* Modifier projet
-* Supprimer projet
-
-
-
-##### Clients
-
-* Afficher clients
-* Ajouter clients
-* Modifier clients
-* Supprimer clients
-
-
-
-##### Employés
-
-* Afficher employés
-* Ajouter employés
-* Modifier employés
-* Supprimer employés
-
-
-
 ##### 1.Validation des données
 
 * Le programme doit valider les entrées des formulaires.
-* Un message adéquat doit être indiqué en dessous des champs non valides à l’utilisateur en cas d’erreur.
-* Les messages comme « veuillez remplir les champs » ne sont pas acceptés.
+* *Un message adéquat* doit être indiqué en dessous des champs non valides à l’utilisateur en cas d’erreur.
+* *Les messages comme « veuillez remplir les champs » ne sont pas acceptés.*
 * Lors d’une opération réussie, on doit avoir un message qui l’indique (une boite de dialogue par exemple).
 
 
@@ -42,7 +14,7 @@
 * On doit pouvoir exporter les projets dans un fichier CSV.
 * Ce fichier doit contenir les informations d’un projet (on ne tient pas compte des employés du
 * projet).
-* ATTENTION : On doit voir le nom du client et non son numéro.
+* *ATTENTION : On doit voir le nom du client et non son numéro.*
 * Les informations d’un même projet devront être dans des colonnes distinctes.
 * Les taux horaires ne doivent pas être négatifs ou trop excessifs ou encore être une valeur non numérique.
 

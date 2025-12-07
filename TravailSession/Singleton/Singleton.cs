@@ -1,5 +1,7 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -46,7 +48,7 @@ namespace TravailSession.Singleton
             {
                 listeProjets.Clear();
                 commande.Connection = con;
-                commande.CommandText = "SELECT * from projets;";
+                commande.CommandText = "SELECT * FROM Projets WHERE statut = 'en cours';";
                 con.Open();
                 MySqlDataReader r = commande.ExecuteReader();
                 while (r.Read())
@@ -210,18 +212,18 @@ namespace TravailSession.Singleton
             return count > 0;
         }
 
-        public bool EmployeExiste(string matricule)
+        public bool EmployeNExistePas(string matricule)
         {
             using MySqlConnection con = new MySqlConnection(connectionString);
             using MySqlCommand commande = con.CreateCommand();
 
-            commande.CommandText = "SELECT COUNT(*) FROM Employes WHERE matricule = @mat;";
-            commande.Parameters.AddWithValue("@mat", matricule);
+            commande.CommandText = "SELECT COUNT(*) FROM Employes WHERE matricule = @matricule;";
+            commande.Parameters.AddWithValue("@matricule", matricule);
 
             con.Open();
             int count = Convert.ToInt32(commande.ExecuteScalar());
 
-            return count > 0;
+            return count == 0;
         }
 
         public void AjouterEmployeProjets(String matricule, string numeroProjet, int heure)
@@ -309,6 +311,158 @@ namespace TravailSession.Singleton
 
                 
                 commande.CommandText = "DELETE FROM Projets WHERE numeroProjet = @numeroProjet;";
+                commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public void AjouterEmploye(string nom, string prenom, string email, string photoIdentite, DateTime dateNaissance, DateTime dateEmbauche, double tauxHoraire)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO Employes ( nom, prenom, datenaissance, email, dateEmbauce, tauxHoraire, photoIdentite) VALUES (@nom, @prenom, @datenaissance, @email, @dateEmbauce, @tauxHoraire, @photoIdentite);";
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@prenom", prenom);
+                commande.Parameters.AddWithValue("@datenaissance", dateNaissance);
+                commande.Parameters.AddWithValue("@email", email);
+                commande.Parameters.AddWithValue("@dateEmbauce", dateEmbauche);
+                commande.Parameters.AddWithValue("@tauxHoraire", tauxHoraire);
+                commande.Parameters.AddWithValue("@photoIdentite", photoIdentite);
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+        public void ModifierEmploye(string matricule, string nom, string prenom, string email, string photoIdentite,double tauxHoraire)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "UPDATE Employes SET nom = @nom,  prenom = @prenom,  email = @email, tauxHoraire = @tauxHoraire, photoIdentite = @photoIdentite  WHERE matricule = @matricule;";
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@prenom", prenom);
+                commande.Parameters.AddWithValue("@email", email);
+                commande.Parameters.AddWithValue("@tauxHoraire", tauxHoraire);
+                commande.Parameters.AddWithValue("@photoIdentite", photoIdentite);
+                commande.Parameters.AddWithValue("@matricule", matricule);
+                
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+        public void supprimerEmploye(string matricule)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+
+
+                commande.CommandText = "DELETE FROM Travail WHERE matricule = @matricule;";
+                commande.Parameters.AddWithValue("@matricule", matricule);
+
+                con.Open();
+                commande.ExecuteNonQuery();
+
+
+                commande.CommandText = "DELETE FROM Employes WHERE matricule = @matricule;";
+                commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public void AjouterClient(string nom, string adresse, string numeroTelephone, string email)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO Clients (nom, adresse, numeroTelephone, email) VALUES (@nom, @adresse, @numeroTelephone, @email);";
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@adresse", adresse);
+                commande.Parameters.AddWithValue("@numeroTelephone", numeroTelephone);
+                commande.Parameters.AddWithValue("@email", email);
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+        public void ModifierClient(int identifiant, string nom, string adresse, string numeroTelephone, string email)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "UPDATE Clients SET  nom = @nom,  adresse = @adresse, numeroTelephone = @numeroTelephone, email = @email WHERE identifiant = @identifiant;";
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@adresse", adresse);
+                commande.Parameters.AddWithValue("@numeroTelephone", numeroTelephone);
+                commande.Parameters.AddWithValue("@email", email);
+                commande.Parameters.AddWithValue("@identifiant", identifiant);
+
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+        public void supprimerClient(int identifiant)
+        {
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+
+                commande.CommandText = "SELECT numeroProjet FROM Projets WHERE identifant = @identifiant;";
+                commande.Parameters.AddWithValue("@identifiant", identifiant);
+
+                con.Open();
+                List<string> projetsDuClient = new();
+
+                using (MySqlDataReader r = commande.ExecuteReader())
+                {
+                    while (r.Read())
+                    {
+                        projetsDuClient.Add(r.GetString("numeroProjet"));
+                    }
+                }
+
+                foreach (string num in projetsDuClient)
+                {
+                    supprimerProjet(num);
+                }
+
+                commande.Parameters.Clear();
+                commande.CommandText = "DELETE FROM Clients WHERE identifiant = @identifiant;";
+                commande.Parameters.AddWithValue("@identifiant", identifiant);
+
                 commande.ExecuteNonQuery();
             }
             catch (MySqlException ex)

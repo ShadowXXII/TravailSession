@@ -67,7 +67,7 @@ namespace TravailSession.Pages.Projets
             int heure = (int)nbxHeure.Value;
             int currentCount = Singleton.Singleton.getInstance().GetEmployeCountForProjet(numeroProjet);
 
-            if (Singleton.Singleton.getInstance().EmployeExiste(matricule))
+            if (Singleton.Singleton.getInstance().EmployeNExistePas(matricule))
             {
                 ContentDialog dialog = new ContentDialog();
                 {
@@ -111,6 +111,7 @@ namespace TravailSession.Pages.Projets
                 return;
             }
             Singleton.Singleton.getInstance().AjouterEmployeProjets(matricule, numeroProjet, heure);
+            lvEmployes.ItemsSource = Singleton.Singleton.getInstance().GetEmployesForProjet(numeroProjet);
         }
     }
 }
