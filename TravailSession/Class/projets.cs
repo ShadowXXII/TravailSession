@@ -38,6 +38,7 @@ namespace TravailSession.Class
             return $"{numeroProjet} - {titre} | Client : {GetClientName()} | Début : {dateDebut.ToShortDateString()} | Budget : {budget}$";
         }
 
+        public string StringCSV { get => $"{numeroProjet},{titre} , {description} , {statut} , {dateDebut} , {budget} , {nombreEmployesRequis} ,{GetClientName()}"; }
 
         public string GetClientName()
         {

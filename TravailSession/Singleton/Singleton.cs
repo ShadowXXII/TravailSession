@@ -10,6 +10,7 @@ namespace TravailSession.Singleton
     {
         string connectionString;
         ObservableCollection<Class.Projet> listeProjets;
+        ObservableCollection<Class.Projet> listeProjetsComplet;
         ObservableCollection<Class.Clients> listeClients;
         ObservableCollection<Class.Employe> listeEmployes;
 
@@ -19,6 +20,7 @@ namespace TravailSession.Singleton
         {
             connectionString = "Server=cours.cegep3r.info;Database=a2025_420345ri_gr2_2386119-matthias-champoux;Uid=2386119;Pwd=2386119;";
             listeProjets = new ObservableCollection<Class.Projet>();
+            listeProjetsComplet = new ObservableCollection<Class.Projet>();
             listeClients = new ObservableCollection<Class.Clients>();
             listeEmployes = new ObservableCollection<Class.Employe>();
         }
@@ -39,6 +41,7 @@ namespace TravailSession.Singleton
             getAllEmployes();
         }
         public ObservableCollection<Class.Projet> ListeP { get => listeProjets; }
+        public ObservableCollection<Class.Projet> ListeProjetsComplet { get => listeProjetsComplet; }
         public void getAllProjets()
         {
             using MySqlConnection con = new MySqlConnection(connectionString);
@@ -46,6 +49,7 @@ namespace TravailSession.Singleton
             try
             {
                 listeProjets.Clear();
+                listeProjetsComplet.Clear();
                 commande.Connection = con;
                 commande.CommandText = "SELECT * FROM Projets WHERE statut = 'en cours';";
                 con.Open();
@@ -66,6 +70,29 @@ namespace TravailSession.Singleton
                 }
                 r.Close();
                 con.Close();
+
+                commande.CommandText = "SELECT * FROM Projets";
+                con.Open();
+                MySqlDataReader r2 = commande.ExecuteReader();
+                while (r2.Read())
+                {
+                    string numeroProjet = r2.GetString("numeroProjet");
+                    string titre = r2.GetString("titre");
+                    DateTime dateDebut = r2.GetDateTime("dateDebut");
+                    string description = r2.GetString("description");
+                    double budget = r2.GetDouble("budget");
+                    int nombreEmployesRequis = r2.GetInt32("nombreEmplyesRequis");
+                    double totalSalaires = r2.GetDouble("totalSalaires");
+                    string statut = r2.GetString("statut");
+                    int identifant = r2.GetInt32("identifant");
+                    Class.Projet projet = new Class.Projet(numeroProjet, titre, statut, description, dateDebut, budget, totalSalaires, nombreEmployesRequis, identifant);
+                    listeProjetsComplet.Add(projet);
+                }
+                r2.Close();
+                con.Close();
+
+
+
             }
             catch (MySqlException ex)
             {

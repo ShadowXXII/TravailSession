@@ -1,17 +1,6 @@
 # To Do List
 
-##### 1.Exportation des données
-
-* On doit pouvoir exporter les projets dans un fichier CSV.
-* Ce fichier doit contenir les informations d’un projet (on ne tient pas compte des employés du
-* projet).
-* *ATTENTION : On doit voir le nom du client et non son numéro.*
-* Les informations d’un même projet devront être dans des colonnes distinctes.
-* Les taux horaires ne doivent pas être négatifs ou trop excessifs ou encore être une valeur non numérique.
-
-
-
-##### 2.Connection \& Déconnection
+##### 1.Connection \& Déconnection
 
 * Un compte administrateur
 * Ajouts/Modifications/Suppressions

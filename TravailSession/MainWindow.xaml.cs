@@ -1,6 +1,11 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.WindowsAppSDK.Runtime.Packages;
+using MySqlX.XDevAPI;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -48,7 +53,7 @@ namespace TravailSession
             }
         }
 
-        private void gestion_clic_item_menu(object sender, RoutedEventArgs e)
+        private async void gestion_clic_item_menu(object sender, RoutedEventArgs e)
         {
             var item = sender as MenuFlyoutItem;
             if (item != null)
@@ -57,7 +62,15 @@ namespace TravailSession
                 {
                     case "exporter":
                         Debug.WriteLine("exporter");
-                        //code pour sauvegarde
+                        var picker = new Windows.Storage.Pickers.FileSavePicker();
+                        var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+                        WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
+                        picker.SuggestedFileName = "Projets";
+                        picker.FileTypeChoices.Add("Fichier CSV", new List<string>() { ".csv" });
+                        Windows.Storage.StorageFile monFichier = await picker.PickSaveFileAsync();
+                        List<Class.Projet> liste = Singleton.Singleton.getInstance().ListeProjetsComplet.ToList();
+                        if (monFichier != null)
+                            await Windows.Storage.FileIO.WriteLinesAsync(monFichier, liste.ConvertAll(x => x.StringCSV), Windows.Storage.Streams.UnicodeEncoding.Utf8);
                         break;
                     case "quitter":
                         Application.Current.Exit();
