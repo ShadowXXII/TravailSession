@@ -13,6 +13,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Pages\Admin\AdminAjouter.xaml" />
+    <None Remove="Pages\Admin\AdminLogIn.xaml" />
     <None Remove="Pages\AjouterProjets.xaml" />
     <None Remove="Pages\Clients\AfficherClients.xaml" />
     <None Remove="Pages\Clients\AjouterClients.xaml" />
@@ -52,6 +54,11 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
     <PackageReference Include="MySql.Data" Version="9.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Admin\AdminAjouter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Employes\AfficherEmployes.xaml">
@@ -130,6 +137,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Employes\AjouterEmployes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Admin\AdminLogIn.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TravailSession.Singleton
 {
@@ -13,7 +16,6 @@ namespace TravailSession.Singleton
         ObservableCollection<Class.Projet> listeProjetsComplet;
         ObservableCollection<Class.Clients> listeClients;
         ObservableCollection<Class.Employe> listeEmployes;
-
         static Singleton instance = null;
 
         private Singleton()
@@ -33,6 +35,19 @@ namespace TravailSession.Singleton
             }
             return instance;
         }
+
+        public bool AdminConnecte { get; private set; } = false;
+
+        public void ConnecterAdmin()
+        {
+            AdminConnecte = true;
+        }
+
+        public void DeconnecterAdmin()
+        {
+            AdminConnecte = false;
+        }
+
 
         public void chargerDonnes()
         {
@@ -496,5 +511,134 @@ namespace TravailSession.Singleton
                 Debug.WriteLine(ex.Message);
             }
         }
+
+        public bool AdminExiste()
+        {
+            using MySqlConnection con = new MySqlConnection(connectionString);
+            using MySqlCommand commande = con.CreateCommand();
+            try
+            {
+                commande.Connection = con;
+                commande.CommandText = "SELECT COUNT(*) FROM Admin;";
+
+                con.Open();
+
+                using (MySqlDataReader r = commande.ExecuteReader())
+                {
+                    if (r.Read()) 
+                    {
+                        int count = r.GetInt32(0);
+                        return count > 0;
+                    }
+                }
+
+                return false; 
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+        }
+
+
+        public void AjouterAdmin(string email, string motDePasse)
+        {
+            string mdpCrypte = crypter(motDePasse, cle);
+            try
+            {
+                using MySqlConnection con = new MySqlConnection(connectionString);
+                using MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO Admin(email, motpass) VALUES (@email, @motpass);";
+                commande.Parameters.AddWithValue("@email", email);
+                commande.Parameters.AddWithValue("@motpass", mdpCrypte);
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public bool VerifierAdmin(string email, string motDePasse)
+        {
+            using MySqlConnection con = new MySqlConnection(connectionString);
+            using MySqlCommand commande = con.CreateCommand();
+
+            commande.CommandText = "SELECT motpass FROM Admin WHERE email = @email";
+            commande.Parameters.AddWithValue("@email", email);
+
+            con.Open();
+            object? result = commande.ExecuteScalar();
+            if (result == null) return false;
+
+            string mdpCrypte = result.ToString();
+            string mdpDecrypte = decrypter(mdpCrypte);
+
+            return mdpDecrypte == motDePasse;
+        }
+
+        const String cle = "qwertyasdfgzxcvb";
+        public string crypter(string texte, string cle)
+        {
+            byte[] iv = new byte[16];
+            byte[] array;
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(cle);
+                aes.IV = iv;
+
+                ICryptoTransform chiffreur = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, chiffreur, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                        {
+                            streamWriter.Write(texte);
+                        }
+
+                        array = memoryStream.ToArray();
+                    }
+                }
+            }
+
+            return Convert.ToBase64String(array);
+        }
+
+
+        public string decrypter(string texteCrypte)
+        {
+            byte[] iv = new byte[16];
+            byte[] buffer = Convert.FromBase64String(texteCrypte);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(cle);
+                aes.IV = iv;
+                ICryptoTransform dechiffreur = aes.CreateDecryptor(aes.Key, aes.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream(buffer))
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, dechiffreur, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                        {
+                            return streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

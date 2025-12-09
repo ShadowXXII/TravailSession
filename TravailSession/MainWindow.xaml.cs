@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using TravailSession.Pages.Admin;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,7 +21,15 @@ namespace TravailSession
         public MainWindow()
         {
             InitializeComponent();
-            mainFrame.Navigate(typeof(Pages.Projets.AfficherProjets));
+
+            //if (!Singleton.Singleton.getInstance().AdminExiste())
+            //{
+            //    ajouter();
+            //}
+            //else
+            //{
+            //    logIn();
+            //}
         }
 
         private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -78,5 +87,30 @@ namespace TravailSession
                 }
             }
         }
+        //
+        private async void logIn()
+        {
+            AdminLogIn dialog = new AdminLogIn();
+            dialog.XamlRoot = gridRacine.XamlRoot;
+            dialog.Title = "Authentification";
+            dialog.PrimaryButtonText = "Se connecter";
+            dialog.CloseButtonText = "Annuler";
+            dialog.DefaultButton = ContentDialogButton.Close;
+
+            ContentDialogResult resultat = await dialog.ShowAsync();
+        }
+
+        private async void ajouter()
+        {
+            AdminAjouter dialog = new AdminAjouter();
+            dialog.XamlRoot = gridRacine.XamlRoot;
+            dialog.Title = "Authentification";
+            dialog.PrimaryButtonText = "Se connecter";
+            dialog.CloseButtonText = "Annuler";
+            dialog.DefaultButton = ContentDialogButton.Close;
+
+            ContentDialogResult resultat = await dialog.ShowAsync();
+        }
+
     }
 }
